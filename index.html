@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aide Mathématiques - Applications, Injections, Surjections</title>
+    <!-- MathJax pour l'affichage des formules mathématiques -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+    <!-- Bibliothèque pour l'export PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+      :root {
+        --primary-color: #4a6fa5;
+        --secondary-color: #166088;
+        --accent-color: #db5461;
+        --light-color: #f8f9fa;
+        --dark-color: #343a40;
+        --success-color: #28a745;
+        --warning-color: #ffc107;
+        --border-radius: 8px;
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s ease;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        line-height: 1.6;
+        color: var(--dark-color);
+        background-color: #f5f7fa;
+        padding-bottom: 2rem;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+
+      header {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow);
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
+      }
+
+      .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      h1 {
+        font-size: 2.2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+      }
+
+      .controls {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 0.7rem 1.5rem;
+        border: none;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        font-weight: 600;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      .btn-primary {
+        background-color: var(--accent-color);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background-color: #c44550;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow);
+      }
+
+      .btn-secondary {
+        background-color: white;
+        color: var(--primary-color);
+      }
+
+      .btn-secondary:hover {
+        background-color: #f0f0f0;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow);
+      }
+
+      .main-content {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      @media (min-width: 992px) {
+        .main-content {
+          grid-template-columns: 3fr 1fr;
+        }
+      }
+
+      .card {
+        background-color: white;
+        border-radius: var(--border-radius);
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--primary-color);
+      }
+
+      h3 {
+        color: var(--secondary-color);
+        margin: 1.5rem 0 1rem 0;
+      }
+
+      p {
+        margin-bottom: 1rem;
+      }
+
+      .definition-box {
+        background-color: #e9f5ff;
+        border-left: 4px solid var(--primary-color);
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        border-radius: 0 var(--border-radius) var(--border-radius) 0;
+      }
+
+      .example-box {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+      }
+
+      .example-title {
+        font-weight: bold;
+        color: var(--secondary-color);
+        margin-bottom: 0.5rem;
+      }
+
+      .verdict {
+        padding: 0.5rem 1rem;
+        border-radius: var(--border-radius);
+        font-weight: bold;
+        margin-top: 1rem;
+        display: inline-block;
+      }
+
+      .verdict-success {
+        background-color: rgba(40, 167, 69, 0.2);
+        color: var(--success-color);
+      }
+
+      .verdict-error {
+        background-color: rgba(219, 84, 97, 0.2);
+        color: var(--accent-color);
+      }
+
+      .math-display {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: var(--border-radius);
+        margin: 1rem 0;
+        text-align: center;
+        font-size: 1.1rem;
+        overflow-x: auto;
+      }
+
+      .summary {
+        background-color: #fff8e1;
+        padding: 1.5rem;
+        border-radius: var(--border-radius);
+        margin: 1.5rem 0;
+        border-left: 4px solid var(--warning-color);
+      }
+
+      .summary h3 {
+        color: var(--warning-color);
+      }
+
+      .sidebar {
+        background-color: white;
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        box-shadow: var(--shadow);
+        height: fit-content;
+      }
+
+      .sidebar h3 {
+        margin-top: 0;
+      }
+
+      .sidebar ul {
+        padding-left: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .sidebar li {
+        margin-bottom: 0.5rem;
+      }
+
+      .key-point {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+      }
+
+      .key-point-icon {
+        background-color: var(--primary-color);
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        flex-shrink: 0;
+      }
+
+      .concept-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin: 1.5rem 0;
+      }
+
+      @media (min-width: 768px) {
+        .concept-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      .concept-card {
+        background-color: white;
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        box-shadow: 0 3px 5px rgba(0, 0, 0, 0.08);
+        border-top: 4px solid var(--primary-color);
+      }
+
+      .concept-card.injection {
+        border-top-color: #17a2b8;
+      }
+
+      .concept-card.surjection {
+        border-top-color: #28a745;
+      }
+
+      .concept-card.bijection {
+        border-top-color: #dc3545;
+      }
+
+      .concept-title {
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin-bottom: 0.8rem;
+        color: var(--dark-color);
+      }
+
+      .concept-card.injection .concept-title {
+        color: #17a2b8;
+      }
+
+      .concept-card.surjection .concept-title {
+        color: #28a745;
+      }
+
+      .concept-card.bijection .concept-title {
+        color: #dc3545;
+      }
+
+      footer {
+        text-align: center;
+        margin-top: 3rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #ddd;
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      /* Styles pour l'impression/export PDF */
+      @media print {
+        .no-print {
+          display: none !important;
+        }
+
+        .card {
+          box-shadow: none;
+          border: 1px solid #ddd;
+        }
+
+        .btn {
+          display: none;
+        }
+
+        header {
+          background: white !important;
+          color: var(--dark-color) !important;
+          box-shadow: none;
+        }
+
+        h1,
+        h2,
+        h3 {
+          color: black !important;
+        }
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .header-content {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .controls {
+          margin-top: 1.5rem;
+          width: 100%;
+        }
+
+        .btn {
+          width: 100%;
+          margin-bottom: 0.5rem;
+        }
+
+        h1 {
+          font-size: 1.8rem;
+        }
+
+        .card {
+          padding: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="header-content">
+          <div>
+            <h1>Aide Mathématiques - 1ère S2</h1>
+            <p class="subtitle">
+              Applications, Injections, Surjections, Bijections
+            </p>
+          </div>
+          <div class="controls">
+            <button class="btn btn-primary" id="exportPdfBtn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"
+                />
+                <path
+                  d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"
+                />
+              </svg>
+              Exporter en PDF
+            </button>
+            <button class="btn btn-secondary" id="printBtn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M13 0H3a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 6H3V2h10v4z"
+                />
+                <path
+                  d="M13 9H3a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2zm0 6H3v-4h10v4z"
+                />
+              </svg>
+              Imprimer
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="main-content">
+        <div>
+          <div class="card">
+            <h2>Introduction</h2>
+            <p>
+              Cette page vise à t'aider à comprendre les concepts
+              d'<strong>applications</strong>, d'<strong>injections</strong>, de
+              <strong>surjections</strong> et de <strong>bijections</strong> en
+              mathématiques. Ces notions sont fondamentales pour ton devoir du
+              26 janvier.
+            </p>
+            <p>
+              Le changement de professeur et de méthode peut souvent
+              déstabiliser les élèves, surtout en 1ère S (1S2) où le niveau
+              d'abstraction augmente.
+            </p>
+
+            <div class="summary">
+              <h3>Conseil de stratégie pour la révision</h3>
+              <p>
+                Comme ton devoir est le 26 janvier, voici ce que je te propose :
+              </p>
+              <ul>
+                <li>
+                  Commence par bien comprendre la définition d'une application
+                  (Partie 1)
+                </li>
+                <li>
+                  Maîtrise les tests mentaux pour injection, surjection et
+                  bijection (Partie 2)
+                </li>
+                <li>
+                  Étudie l'exercice complexe (Partie 3) pour voir l'application
+                  des concepts
+                </li>
+                <li>
+                  Comprends le principe de restriction et réciproque (Partie 4)
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card" id="partie1">
+            <h2>
+              Partie 1 : Comprendre "Exercice 1 : Reconnaître une application"
+            </h2>
+
+            <div class="definition-box">
+              <h3>Le concept clé</h3>
+              <p>
+                Pour qu'une correspondance soit une
+                <strong>application</strong>, deux conditions doivent être
+                réunies pour tout élément \(x\) de l'ensemble de départ :
+              </p>
+              <ol>
+                <li>
+                  <strong>Existence :</strong> L'image \(f(x)\) doit exister
+                  (pas de division par zéro, pas de racine carrée de nombre
+                  négatif).
+                </li>
+                <li>
+                  <strong>Appartenance :</strong> Le résultat \(f(x)\) doit
+                  obligatoirement tomber dans l'ensemble d'arrivée indiqué.
+                </li>
+              </ol>
+            </div>
+
+            <h3>Analyse d'exemples de la fiche</h3>
+
+            <div class="example-box">
+              <div class="example-title">Exemple 1</div>
+              <div class="math-display">
+                Cas : \(f: \mathbb{R} \to \mathbb{R}^+\), \(f(x) = -x^2\)
+              </div>
+              <p>
+                <strong>Problème :</strong> L'ensemble d'arrivée est
+                \(\mathbb{R}^+\) (nombres positifs). Si on prend \(x = 1\), le
+                calcul donne \(-1^2 = -1\). Ce résultat n'est pas dans
+                l'ensemble d'arrivée.
+              </p>
+              <div class="verdict verdict-error">
+                Verdict : Ce n'est pas une application.
+              </div>
+            </div>
+
+            <div class="example-box">
+              <div class="example-title">Exemple 2</div>
+              <div class="math-display">
+                Cas : \(f: \mathbb{R} \to \mathbb{R}^+\), \(f(x) = x^2 + 1\)
+              </div>
+              <p>
+                <strong>Analyse :</strong> Un carré est toujours positif ou nul.
+                Donc \(x^2 + 1\) sera toujours \(\geq 1\), donc toujours
+                positif. Le résultat atterrit bien dans \(\mathbb{R}^+\).
+              </p>
+              <div class="verdict verdict-success">
+                Verdict : C'est une application.
+              </div>
+            </div>
+
+            <div class="example-box">
+              <div class="example-title">Exemple 3</div>
+              <div class="math-display">
+                Cas : \(f: \mathbb{R} \setminus \{1\} \to \mathbb{R} \setminus
+                \{3\}\), \(f(x) = \frac{2x+1}{x-1}\)
+              </div>
+              <p>
+                <strong>Départ :</strong> On enlève 1 (\(\mathbb{R} \setminus
+                \{1\}\)), donc on ne divise jamais par zéro. C'est bon.
+              </p>
+              <p>
+                <strong>Arrivée :</strong> L'ensemble interdit la valeur 3.
+                Est-ce que \(f(x) = 3\) est possible ?
+              </p>
+              <div class="math-display">
+                \(\frac{2x+1}{x-1} = 3 \Rightarrow 2x+1 = 3(x-1) \Rightarrow
+                2x+1 = 3x-3 \Rightarrow x = 4\)
+              </div>
+              <p>
+                Mais \(x = 4\) est dans l'ensemble de départ, donc la valeur 3
+                pourrait être atteinte. Attends, vérifions :
+              </p>
+              <div class="math-display">
+                \(f(4) = \frac{2\times4+1}{4-1} = \frac{9}{3} = 3\)
+              </div>
+              <p>
+                Donc la fonction pourrait donner 3, mais 3 n'est pas dans
+                l'ensemble d'arrivée. Ce n'est donc pas une application.
+              </p>
+              <div class="verdict verdict-error">
+                Verdict : Ce n'est pas une application.
+              </div>
+            </div>
+          </div>
+
+          <div class="card" id="partie2">
+            <h2>
+              Partie 2 : Le cœur du devoir "Injection, Surjection, Bijection"
+            </h2>
+            <p>
+              C'est la partie théorique la plus importante de l'Exercice 2.
+              Retiens ces "tests" mentaux :
+            </p>
+
+            <div class="concept-grid">
+              <div class="concept-card injection">
+                <div class="concept-title">1. Injection (Injective)</div>
+                <p>
+                  <strong>Définition simple :</strong> Deux \(x\) différents ne
+                  donnent jamais le même résultat. On ne "gaspille" pas les
+                  flèches vers la même cible.
+                </p>
+                <p>
+                  <strong>La méthode de preuve :</strong> On suppose que
+                  \(f( x_1 ) = f( x_2 )\) et on doit prouver à la fin que \( x_1 =
+                  x_2 \ ).
+                </p>
+                <p>
+                  <strong>Contre-exemple :</strong> La fonction carré \(f:
+                  \mathbb{R} \to \mathbb{R}\), \(f(x) = x^2\) n'est
+                  <strong>pas</strong> injective sur \(\mathbb{R}\), car \(f( 2 )
+                  = f( -2 ) = 4\). Deux entrées différentes donnent la même
+                  sortie.
+                </p>
+              </div>
+
+              <div class="concept-card surjection">
+                <div class="concept-title">2. Surjection (Surjective)</div>
+                <p>
+                  <strong>Définition simple :</strong> Tous les éléments de
+                  l'ensemble d'arrivée sont atteints au moins une fois.
+                  "Personne ne reste seul sur le banc de touche".
+                </p>
+                <p>
+                  <strong>La méthode de preuve :</strong> On pose l'équation
+                  \(f(x) = y\). Pour n'importe quel \(y\) de l'ensemble
+                  d'arrivée, on doit pouvoir trouver au moins un \(x\).
+                </p>
+              </div>
+
+              <div class="concept-card bijection">
+                <div class="concept-title">3. Bijection (Bijective)</div>
+                <p>
+                  <strong>Définition :</strong> C'est à la fois injectif et
+                  surjectif. Chaque élément de départ a un unique partenaire à
+                  l'arrivée, et vice-versa. C'est un "mariage parfait".
+                </p>
+                <p>
+                  <strong>Intérêt :</strong> Si c'est bijectif, on peut faire
+                  "marche arrière" (Fonction réciproque \(f^{-1}\)).
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" id="partie3">
+            <h2>
+              Partie 3 : Aide détaillée sur l'Exercice 2 (Le cas complexe)
+            </h2>
+            <p>
+              L'exercice 2, question 1 est un classique difficile. La fonction
+              est :
+            </p>
+            <div class="math-display">
+              \(f: \mathbb{R} \to \mathbb{R}, f(x) = \frac{x-1}{x+1}\)
+            </div>
+
+            <h3>a) Montrer que \(f(x) \in ]-1, 1[\)</h3>
+            <p>Explique ainsi :</p>
+            <p>
+              Le dénominateur est \(x+1\). On peut remarquer que pour tout \(x
+              \in \mathbb{R}\), on a :
+            </p>
+            <div class="math-display">\(-1 < \frac{x-1}{x+1} < 1\)</div>
+            <p>
+              Pour le montrer, on peut étudier le signe de \(f(x) - 1\) et
+              \(f(x) + 1\) :
+            </p>
+            <div class="math-display">
+              \(f(x) - 1 = \frac{x-1}{x+1} - 1 = \frac{x-1 - (x+1)}{x+1} =
+              \frac{-2}{x+1}\)
+            </div>
+            <div class="math-display">
+              \(f(x) + 1 = \frac{x-1}{x+1} + 1 = \frac{x-1 + (x+1)}{x+1} =
+              \frac{2x}{x+1}\)
+            </div>
+            <p>
+              En étudiant les signes selon les valeurs de \(x\), on trouve bien
+              que \(-1 < f(x) < 1\).
+            </p>
+
+            <h3>b) Surjective ?</h3>
+            <p>
+              L'énoncé dit que l'ensemble d'arrivée est \(\mathbb{R}\) (tous les
+              nombres).
+            </p>
+            <p>
+              Or, on vient de prouver que le résultat est toujours coincé entre
+              -1 et 1.
+            </p>
+            <p>
+              Peut-on obtenir le résultat 5 par exemple ? Non, car 5 n'est pas
+              dans \(]-1, 1[\).
+            </p>
+            <div class="verdict verdict-error">
+              Donc elle n'est <strong>pas surjective</strong> sur
+              \(\mathbb{R}\).
+            </div>
+
+            <h3>c) Injective ?</h3>
+            <p>Pour vérifier l'injectivité, on suppose \(f(x_1) = f(x_2)\) :</p>
+            <div class="math-display">
+              \(\frac{x_1-1}{x_1+1} = \frac{x_2-1}{x_2+1}\)
+            </div>
+            <p>En faisant le produit en croix :</p>
+            <div class="math-display">\((x_1-1)(x_2+1) = (x_2-1)(x_1+1)\)</div>
+            <div class="math-display">
+              \(x_1x_2 + x_1 - x_2 - 1 = x_1x_2 + x_2 - x_1 - 1\)
+            </div>
+            <div class="math-display">\(x_1 - x_2 = x_2 - x_1\)</div>
+            <div class="math-display">
+              \(2x_1 = 2x_2 \Rightarrow x_1 = x_2\)
+            </div>
+            <div class="verdict verdict-success">C'est injectif.</div>
+          </div>
+
+          <div class="card" id="partie4">
+            <h2>Partie 4 : Restriction et Réciproque (Exercice 3)</h2>
+            <p>C'est le lien entre la théorie et la pratique.</p>
+
+            <div class="definition-box">
+              <h3>Le principe</h3>
+              <p>
+                Une fonction comme \(f: \mathbb{R} \to \mathbb{R}, f(x) = x^2\)
+                n'est pas bijective (pas injective). Mais si on
+                <strong>restreint</strong> l'ensemble de départ aux positifs
+                seulement (\(\mathbb{R}^+\)), elle devient bijective et on peut
+                trouver sa réciproque (la racine carrée).
+              </p>
+            </div>
+
+            <h3>Pour l'exercice 3.1 :</h3>
+            <div class="math-display">
+              \(f: \mathbb{R} \to \mathbb{R}, f(x) = x^2 + 2x - 3\)
+            </div>
+
+            <ul>
+              <li>
+                Elle n'est pas bijective sur \(\mathbb{R}\) car par exemple
+                \(f(0) = -3\) et \(f(-2) = -3\). Deux \(x\) différents donnent
+                le même résultat.
+              </li>
+              <li>
+                Mais sur l'intervalle \([-1, +\infty[\), elle devient bijective.
+              </li>
+            </ul>
+
+            <h3>Comment trouver la réciproque ?</h3>
+            <p>La méthode mécanique à apprendre par cœur :</p>
+            <ol>
+              <li>Poser \(y = f(x)\).</li>
+              <li>
+                Tout faire pour isoler \(x\) (cela demandera souvent de résoudre
+                une équation du second degré avec Delta).
+              </li>
+              <li>
+                L'expression finale de \(x\) en fonction de \(y\) est la
+                réciproque \(f^{-1}(y)\).
+              </li>
+            </ol>
+
+            <div class="example-box">
+              <div class="example-title">Exemple pour \(f(x) = 2x + 3\)</div>
+              <p>1. On pose \(y = 2x + 3\)</p>
+              <p>
+                2. On isole \(x\) : \(2x = y - 3 \Rightarrow x = \frac{y-3}{2}\)
+              </p>
+              <p>3. La réciproque est \(f^{-1}(y) = \frac{y-3}{2}\)</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar">
+          <h3>Sommaire</h3>
+          <ul>
+            <li>
+              <a href="#partie1">Partie 1 : Reconnaître une application</a>
+            </li>
+            <li>
+              <a href="#partie2">Partie 2 : Injection, Surjection, Bijection</a>
+            </li>
+            <li><a href="#partie3">Partie 3 : Exercice 2 détaillé</a></li>
+            <li><a href="#partie4">Partie 4 : Restriction et Réciproque</a></li>
+          </ul>
+
+          <h3>Points Clés à Retenir</h3>
+          <div class="key-point">
+            <div class="key-point-icon">1</div>
+            <div>
+              Une application doit avoir une image pour tout x et cette image
+              doit être dans l'ensemble d'arrivée.
+            </div>
+          </div>
+          <div class="key-point">
+            <div class="key-point-icon">2</div>
+            <div>Injection : deux x différents → deux images différentes.</div>
+          </div>
+          <div class="key-point">
+            <div class="key-point-icon">3</div>
+            <div>Surjection : tout élément de l'arrivée est atteint.</div>
+          </div>
+          <div class="key-point">
+            <div class="key-point-icon">4</div>
+            <div>
+              Bijection = injection + surjection → existence d'une réciproque.
+            </div>
+          </div>
+
+          <h3>Prochaines Étapes</h3>
+          <p>Pour bien préparer ton devoir du 26 janvier :</p>
+          <ol>
+            <li>Refais les exercices de la fiche en t'aidant de cette page</li>
+            <li>Vérifie chaque étape de raisonnement</li>
+            <li>Exporte cette page en PDF pour réviser hors ligne</li>
+            <li>Demande de l'aide sur les points qui restent flous</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <footer class="container">
+      <p>
+        Page créée pour aider à la compréhension des applications mathématiques
+        - 1ère S2
+      </p>
+      <p>
+        D'après les explications de ALIOU MAOUDO BALDE - Dernière mise à jour :
+        Janvier 2025
+      </p>
+    </footer>
+
+    <script>
+      // Configuration de MathJax
+      window.MathJax = {
+        tex: {
+          inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"],
+          ],
+          displayMath: [
+            ["$$", "$$"],
+            ["\\[", "\\]"],
+          ],
+          processEscapes: true,
+          processEnvironments: true,
+        },
+        options: {
+          skipHtmlTags: ["script", "noscript", "style", "textarea", "pre"],
+        },
+      };
+
+      // Fonction pour exporter en PDF
+      document
+        .getElementById("exportPdfBtn")
+        .addEventListener("click", function () {
+          const element = document.body;
+
+          // Options pour html2pdf
+          const options = {
+            margin: [10, 10, 10, 10],
+            filename: "Aide-Mathematiques-Applications.pdf",
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: {
+              scale: 2,
+              useCORS: true,
+              scrollY: 0,
+              windowWidth: document.documentElement.scrollWidth,
+            },
+            jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+          };
+
+          // Montrer un message pendant la génération
+          const originalText = this.innerHTML;
+          this.innerHTML = "<span>Génération du PDF en cours...</span>";
+          this.disabled = true;
+
+          // Générer le PDF
+          html2pdf()
+            .set(options)
+            .from(element)
+            .save()
+            .then(() => {
+              // Réinitialiser le bouton
+              this.innerHTML = originalText;
+              this.disabled = false;
+
+              // Notification de succès
+              alert("PDF généré avec succès !");
+            });
+        });
+
+      // Fonction pour imprimer
+      document
+        .getElementById("printBtn")
+        .addEventListener("click", function () {
+          window.print();
+        });
+
+      // Améliorer l'expérience mobile : fermeture du menu après clic sur un lien
+      document.querySelectorAll(".sidebar a").forEach((link) => {
+        link.addEventListener("click", function () {
+          // Sur mobile, faire défiler doucement vers la section
+          if (window.innerWidth < 992) {
+            const targetId = this.getAttribute("href");
+            const targetElement = document.querySelector(targetId);
+
+            if (targetElement) {
+              window.scrollTo({
+                top: targetElement.offsetTop - 20,
+                behavior: "smooth",
+              });
+            }
+          }
+        });
+      });
+
+      // Afficher un message de bienvenue
+      window.addEventListener("DOMContentLoaded", (event) => {
+        console.log("Page chargée avec succès !");
+        // Forcer le rendu MathJax après le chargement
+        if (window.MathJax) {
+          window.MathJax.typesetPromise();
+        }
+      });
+    </script>
+  </body>
+</html>
